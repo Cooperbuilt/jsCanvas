@@ -23,6 +23,8 @@
 		ctx.lineJoin = 'round';
 		//when a line ends, it should also be rounded
 		ctx.lineCap = 'round'
+		ctx.lineWidth = 20;
+
 
 		//flag for drawing only on click 
 		let isDrawing = false; 
@@ -31,10 +33,33 @@
 		let lastX = 0;
 		let lastY = 0;
 
+		let hue = 0;
+		//flag for line width
+		let direction = true;
+
+
 		function draw(e) {
+
 			if(!isDrawing) return;
 			console.log(e);
+			//Set color
+			ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
+			//increent hue to change color everytime we draw
+			hue += Math.random() * 3;
+			
 
+			//LOGIC TO CHANGE LINE SIZE
+			if(ctx.lineWidth >= 100 || ctx.lineWidth <= 1) {
+				direction = !direction;
+			}
+
+			if(direction) {
+				ctx.lineWidth++;
+			}
+			else {
+				ctx.lineWidth--;
+			}
+			//draw the line
 			ctx.beginPath();
 			ctx.moveTo(lastX, lastY);
 			ctx.lineTo(e.offsetX, e.offsetY);
@@ -43,8 +68,9 @@
 			//ES6 destructuring array re-assignment
 			[lastX, lastY] = [e.offsetX, e.offsetY];
 
-		}
+		}//END DRAW FUNCITON
 
+		//EVENT HANDLERS
 		canvas.addEventListener('mousedown', (e) => {
 			isDrawing = true;
 			[lastX, lastY] = [e.offsetX, e.offsetY];
