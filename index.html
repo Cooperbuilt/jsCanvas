@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HTML5 Canvas</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+
+	<body>
+		<canvas id="draw" width="800" height="800"></canvas>
+	
+		<script>
+		//get canvas
+		const canvas = document.querySelector('#draw');
+		//get context
+		const ctx = canvas.getContext('2d');
+		//set height and width to the window size
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight;
+
+		ctx.strokeStyle = '#BADA55';
+		//when a line meets another line, it should be rounded
+		ctx.lineJoin = 'round';
+		//when a line ends, it should also be rounded
+		ctx.lineCap = 'round'
+
+		//flag for drawing only on click 
+		let isDrawing = false; 
+		
+		//where do we finish the drawing
+		let lastX = 0;
+		let lastY = 0;
+
+		function draw(e) {
+			if(!isDrawing) return;
+			console.log(e);
+
+			ctx.beginPath();
+			ctx.moveTo(lastX, lastY);
+			ctx.lineTo(e.offsetX, e.offsetY);
+			ctx.stroke();
+
+			//ES6 destructuring array re-assignment
+			[lastX, lastY] = [e.offsetX, e.offsetY];
+
+		}
+
+		canvas.addEventListener('mousemove', draw);
+		canvas.addEventListener('mousedown', () => isDrawing = true);
+		canvas.addEventListener('mouseup', () => isDrawing = false);
+		canvas.addEventListener('mouseout', () => isDrawing = false);
+
+
+		</script>
+	</body>
+ß
+</html>
